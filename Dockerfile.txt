@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY pyproject.toml README.md /app/
+RUN pip install --no-cache-dir uv && uv pip install -e .
+
+COPY universal_ai /app/universal_ai
+COPY .env.example /app/.env.example
+COPY data /app/data
+
+ENV HOST=0.0.0.0
+ENV PORT=8000
+
+EXPOSE 8000
+CMD ["uvicorn", "universal_ai.api.server:app", "--host", "0.0.0.0", "--port", "8000"]
